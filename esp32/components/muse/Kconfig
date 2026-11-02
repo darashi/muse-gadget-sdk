@@ -133,6 +133,10 @@ menu "Muse"
             bool "Waveshare ESP32-P4-WIFI6-Touch-LCD-3.5 (ESP32-P4 + C6)"
             depends on IDF_TARGET_ESP32P4
 
+        config MUSE_BOARD_M5STACK_TAB5
+            bool "M5Stack Tab5 (ESP32-P4 + C6, 720x1280 touch LCD)"
+            depends on IDF_TARGET_ESP32P4
+
         config MUSE_BOARD_DEOTALAND_ROROLEE
             bool "Deotaland RoRoLee (ESP32-S3, 240x120 AMOLED, three buttons, no touch)"
             depends on IDF_TARGET_ESP32S3
@@ -175,6 +179,7 @@ menu "Muse"
         default "vn_s3_183" if MUSE_BOARD_VN_S3_183
         default "ai_passport" if MUSE_BOARD_AI_PASSPORT
         default "waveshare_p4_lcd35" if MUSE_BOARD_WAVESHARE_P4_LCD35
+        default "m5stack_tab5" if MUSE_BOARD_M5STACK_TAB5
         default "deotaland_rorolee" if MUSE_BOARD_DEOTALAND_ROROLEE
         default "none"
 

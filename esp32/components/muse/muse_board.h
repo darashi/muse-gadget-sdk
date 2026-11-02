@@ -101,7 +101,11 @@ typedef struct {
     int frame_ms;           /* face animation period */
     int avatar_px;          /* optional avatar canvas size; 0 uses the UI default */
 
-    /* Power rails, buses, expanders. Runs first. */
+    /* Optional radio power/bus setup before Link reads the coprocessor MAC.
+     * Runs before the Muse boot task and before init(), without NVS. */
+    esp_err_t (*early_init)(void);
+
+    /* Power rails, buses, expanders. Runs first in the Muse boot task. */
     esp_err_t (*init)(void);
 
     /* Starts the panel, LVGL and its task; *touch may be left NULL. */

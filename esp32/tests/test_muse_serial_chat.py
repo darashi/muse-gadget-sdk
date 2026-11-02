@@ -249,6 +249,12 @@ class PacingTest(unittest.TestCase):
         self.assertIn(board.device, chat.ports.command_ports([board]))
         self.assertFalse(chat.ports.paced(board.device, [board]))
 
+    def test_tab5_uses_native_usb_for_chat_and_flash(self) -> None:
+        self.assertEqual(chat.ports.find("tab5", ports=[self.STICKS3]), self.STICKS3.device)
+        self.assertIn(self.STICKS3.device, chat.ports.command_ports([self.STICKS3]))
+        with self.assertRaises(chat.ports.NotFound):
+            chat.ports.find("tab5", ports=[])
+
     def test_usbs_keeps_single_pairs_single(self) -> None:
         self.assertEqual(chat.ports._usbs(chat.ports.USJ), (chat.ports.USJ,))
         self.assertEqual(chat.ports._usbs(chat.ports.USB["core2"]), chat.ports.USB["core2"])

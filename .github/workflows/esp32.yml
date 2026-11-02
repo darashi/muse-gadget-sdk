@@ -253,6 +253,9 @@ jobs:
           - board: muse-deotaland-rorolee
             target: esp32s3
             overlays: ";devices/sdkconfig.muse;devices/sdkconfig.muse-deotaland-rorolee"
+          - board: muse-m5stack-tab5
+            target: esp32p4
+            overlays: ";devices/sdkconfig.muse;devices/sdkconfig.muse-m5stack-tab5"
     defaults:
       run:
         shell: bash
