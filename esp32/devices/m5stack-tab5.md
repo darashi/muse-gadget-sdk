@@ -68,10 +68,17 @@ board updater uses different pins. Do not install it unchanged on the Tab5.
 | SDIO CLK | 12 |
 | SDIO CMD | 13 |
 | SDIO D0 / D1 / D2 / D3 | 11 / 10 / 9 / 8 |
-| C6 reset | 15, active low |
+| C6 CHIP_PU | 15; must be high after reset |
 
-`CONFIG_ESP32P4_TAB5_C6_BOARD` selects this mapping in ESP-Hosted. Muse's
-early board hook powers the C6 before Link requests its MAC address.
+`CONFIG_ESP32P4_TAB5_C6_BOARD` selects this mapping in ESP-Hosted. Override
+its reset default with `CONFIG_ESP_HOSTED_SDIO_RESET_ACTIVE_HIGH=y`: the
+2.x driver ends its reset pulse at the selected "active" level, and C6
+CHIP_PU must finish high. Copying the factory's 1.x active-low setting
+leaves the C6 in reset with this driver. Espressif describes the version
+difference in [ESP-Hosted issue 244](https://github.com/espressif/esp-hosted-mcu/issues/244).
+Muse's early board hook powers the C6 before Link requests its MAC address.
+Transport DMA pools prefer PSRAM to avoid exhausting internal RAM before
+the scheduler releases the startup stack memory.
 
 ## Controls and validation
 
@@ -81,10 +88,14 @@ and tap it to wake the dimmed screen. RESET/BOOT is managed by the Tab5's
 power controller; it is not wired as Muse's talk or factory-reset button.
 The physical power button retains the board's hardware power controls.
 
-The port builds with ESP-IDF v6.0.1. Hardware validation is pending: boot,
-panel detection, touch coordinates,
-BLE pairing, Wi-Fi reconnect, microphone channel order, speaker playback,
-charging and screen wake must be checked on a real Tab5. Camera, SD card,
+The port builds with ESP-IDF v6.0.1. On an ST7121 Tab5, UART logs confirmed
+boot, 32 MB PSRAM, panel detection, UI creation, 16 kHz stereo codec
+initialization and BLE advertising. The C6 was upgraded from 1.4.1 to 2.12.13
+over SDIO; its new version was verified after reboot.
+
+Touch coordinates, app pairing, Wi-Fi connection/reconnect, microphone
+channel order, actual recording/playback, charging and screen wake still
+need hardware checks. Camera, SD card,
 IMU, battery readings and software shutdown are not exposed by this port.
 Images from Muse are unavailable on P4 because its ROM has no JPEG decoder.
 The touchscreen and LVGL keep running while the backlight is off so a tap can

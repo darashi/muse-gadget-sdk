@@ -31,7 +31,12 @@ CONFIG_ESP_HOSTED_SDIO_HOST_INTERFACE=y
 CONFIG_ESP_HOSTED_SDIO_SLOT_1=y
 CONFIG_ESP_HOSTED_SDIO_4_BIT_BUS=y
 CONFIG_ESP_HOSTED_SDIO_GPIO_RESET_SLAVE=15
-CONFIG_ESP_HOSTED_SDIO_RESET_ACTIVE_LOW=y
+# ESP-Hosted 2.x finishes its reset pulse at the selected "active" level.
+# C6 CHIP_PU must finish high. This differs from the factory's 1.x setting.
+CONFIG_ESP_HOSTED_SDIO_RESET_ACTIVE_HIGH=y
+# ESP-Hosted allocates its DMA pools before the scheduler releases startup
+# stack memory. Use P4's DMA-capable PSRAM instead of exhausting early SRAM.
+CONFIG_ESP_HOSTED_MEMPOOL_PREFER_SPIRAM=y
 # NimBLE on P4 uses the C6's BLE controller through ESP-Hosted VHCI.
 CONFIG_BT_CONTROLLER_DISABLED=y
 CONFIG_BT_NIMBLE_TRANSPORT_UART=n
